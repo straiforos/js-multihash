@@ -118,7 +118,7 @@ exports.decode = function decode (bytes) {
  *
  * > **Note:** the length is derived from the length of the digest itself.
  *
- * @param {Uint8Array} digest
+ * @param {Uint8Array|Buffer} digest
  * @param {string|number} code
  * @param {number} [length]
  * @returns {Uint8Array}
@@ -130,10 +130,14 @@ exports.encode = function encode (digest, code, length) {
 
   // ensure it's a hashfunction code.
   const hashfn = exports.coerceCode(code)
-
-  if (!(digest instanceof Uint8Array)) {
-    throw new Error('digest should be a Uint8Array')
+  if(!!digest && !!digest.Body){
+    digest = digest.Body;
+  } else {
+    if (!(digest instanceof Uint8Array)) {
+      throw new Error('digest should be a Uint8Array')
+    }
   }
+
 
   if (length == null) {
     length = digest.length
